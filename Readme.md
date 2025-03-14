@@ -64,6 +64,29 @@ Connection: close
 ```
 ---
 
+## 🚀 GitHub Actions Workflow Definition
+
+This project uses a **CI/CD pipeline** with GitHub Actions to automate Docker image building, pushing to Docker Hub, and updating the Kubernetes deployment with ArgoCD.
+
+### **Workflow Overview**
+The workflow consists of two main jobs:
+1. **`build-and-push`** – Builds a Docker image for the API and pushes it to Docker Hub.
+2. **`deploywithargocd`** – Updates the ArgoCD deployment by modifying the Kubernetes ConfigMap version in the `kantox-k8s` repository.
+
+### **Workflow Steps**
+#### 1. **Build and Push Docker Image**
+- Runs on a push to the `main` branch.
+- Logs into Docker Hub using GitHub Secrets.
+- Builds and pushes the API image.
+
+#### 2. **Update Kubernetes ConfigMap and Deploy with ArgoCD**
+- Clones the `kantox-k8s` repository.
+- Retrieves the current `AUXILIARY_SERVICE_VERSION` from `configmap.yaml`.
+- Increments the version number (patch update).
+- Commits and pushes the updated `configmap.yaml`.
+- ArgoCD will detect the change and automatically deploy the new version.
+
+---
 ## 🙏 Acknowledgments
 
 - [Python Documentation](https://docs.python.org/3/)
